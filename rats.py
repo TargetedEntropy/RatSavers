@@ -62,6 +62,20 @@ def draw_gameover(saved_rat_count):
     pygame.display.update()
     pygame.time.delay(5000)
 
+def draw_lost_rats(rat_count):
+    draw_text = WINNER_FONT.render(f"Too Many Rats!", 1, WHITE)
+    WIN.blit(
+        draw_text,
+        (
+            WIDTH / 2 - draw_text.get_width() / 2,
+            HEIGHT / 2 - draw_text.get_height() / 2,
+        ),
+    )
+
+    pygame.display.update()
+    pygame.time.delay(5000)
+
+
 def draw_rats_saved(rat_count):
     draw_text = WINNER_FONT.render(f"Saved {rat_count} Rats!", 1, WHITE)
     WIN.blit(
@@ -198,9 +212,7 @@ DOCK_PAUSE_COUNT = 0
 
 def update_docks_list(rat_count):
     global DOCK_PAUSE_COUNT
-    print(f"CHECK: {DOCK_PAUSE_COUNT}")
     if MAX_DOCKS > len(DOCK_LIST) and rat_count >= 10 and DOCK_PAUSE_COUNT == 0:
-        print(f"CREATING DOCK {DOCK_PAUSE_COUNT}")
         dock = create_dock()
         DOCK_LIST.append(dock)
     elif DOCK_PAUSE_COUNT > 0:
@@ -440,6 +452,20 @@ def main():
                     rat_count = 0
                     #raft_health -= 1
                     DOCK_LIST.remove(dock)
+
+            if rat_count >= random.randrange(20, 25):
+                draw_text = WINNER_FONT.render(f"Too Many Rats!", 1, WHITE)
+                WIN.blit(
+                    draw_text,
+                    (
+                        WIDTH / 2 - draw_text.get_width() / 2,
+                        HEIGHT / 2 - draw_text.get_height() / 2,
+                    ),
+                )
+                rat_count = 0
+
+                pygame.display.update()
+                pygame.time.delay(1000)
 
 
             if yellow.x <= 65:
