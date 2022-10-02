@@ -1,4 +1,5 @@
-from tkinter.tix import MAX
+# from tkinter.tix import MAX
+import sys
 import os
 import random
 import pygame
@@ -18,13 +19,6 @@ YELLOW = (255, 255, 0)
 BLUE = (0, 0, 205)
 
 
-BORDER = pygame.Rect(WIDTH // 2 - 5, 0, 10, HEIGHT)
-BLOOP_SOUND = pygame.mixer.Sound(os.path.join("Assets", "bloop.wav"))
-CRASH_SOUND = pygame.mixer.Sound(os.path.join("Assets", "crash.wav"))
-
-HEALTH_FONT = pygame.font.SysFont("comicsans", 40)
-WINNER_FONT = pygame.font.SysFont("conicsans", 100)
-
 FPS = 60
 VEL = 5
 BULLET_VEL = 7
@@ -33,19 +27,43 @@ RAFT_WIDTH, RAFT_HEIGHT = 55, 40
 
 YELLOW_HIT = pygame.USEREVENT + 1
 
-RAFT_IMAGE = pygame.image.load(os.path.join("Assets", "raft.png"))
-DOCK_IMAGE = pygame.image.load(os.path.join("Assets", "dock.png"))
-TRASH_IMAGE = pygame.image.load(os.path.join("Assets", "trash.png"))
+
+def resource_path(relative_path):
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
+BORDER = pygame.Rect(WIDTH // 2 - 5, 0, 10, HEIGHT)
+HEALTH_FONT = pygame.font.SysFont("comicsans", 40)
+WINNER_FONT = pygame.font.SysFont("conicsans", 100)
+
+
+BLOOP_SOUND = pygame.mixer.Sound(
+    resource_path(os.path.join("Assets", "bloop.wav")))
+CRASH_SOUND = pygame.mixer.Sound(
+    resource_path(os.path.join("Assets", "crash.wav")))
+
+RAFT_IMAGE = pygame.image.load(
+    resource_path(os.path.join("Assets", "raft.png")))
+DOCK_IMAGE = pygame.image.load(
+    resource_path(os.path.join("Assets", "dock.png")))
+TRASH_IMAGE = pygame.image.load(
+    resource_path(os.path.join("Assets", "trash.png")))
+
+RAT_IMAGE = pygame.image.load(resource_path(os.path.join("Assets", "rat.png")))
+SEWER = pygame.transform.scale(
+    pygame.image.load(resource_path(os.path.join(
+        "Assets", "sewer.png"))), (WIDTH, HEIGHT)
+)
+
 
 RAFT_RECT = pygame.transform.rotate(
     pygame.transform.scale(RAFT_IMAGE, (RAFT_WIDTH, RAFT_HEIGHT)), 0
-)
-
-RAT_IMAGE = pygame.image.load(os.path.join("Assets", "rat.png"))
-
-
-SEWER = pygame.transform.scale(
-    pygame.image.load(os.path.join("Assets", "sewer.png")), (WIDTH, HEIGHT)
 )
 
 
@@ -347,6 +365,7 @@ def handle_raft_movement(keys_pressed, raft):
     if (keys_pressed[pygame.K_s] and raft.y +
             VEL + raft.height < HEIGHT - 15):  # Down
         raft.y += VEL
+
 
 def main():
     raft = pygame.Rect(100, HEIGHT - 100, RAFT_WIDTH, RAFT_HEIGHT)  # left
